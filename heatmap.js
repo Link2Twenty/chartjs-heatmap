@@ -78,8 +78,8 @@
       const meta = me.getMeta();
       const xScale = me.getScaleForId(meta.xAxisID);
       const yScale = me.getScaleForId(meta.yAxisID);
-      const yTickHeight = Math.abs(yScale.getPixelForTick(1) - yScale.getPixelForTick(0));
-      const xTickWidth = Math.abs(xScale.getPixelForTick(index + 1) - xScale.getPixelForTick(index));
+      const yTickHeight = Math.abs(yScale.getPixelForTick(1.1) - yScale.getPixelForTick(0.2));
+      const xTickWidth = Math.abs(xScale.getPixelForTick(index + 0.9) - xScale.getPixelForTick(index));
 
       const xCoord = typeof data.x === "string" ? me.chart.config.data.xLabels.indexOf(data.x) : data.x;
       const yCoord = typeof data.y === "string" ? me.chart.config.data.yLabels.indexOf(data.y) : data.y;
