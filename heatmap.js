@@ -102,7 +102,7 @@
                 // Appearance
                 base: yScale.getPixelForTick(data.y) + yTickHeight,
                 width: xTickWidth,
-                backgroundColor: 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + data.a + ')',
+                backgroundColor: 'rgba(' + data.color.r || color.r || 100 + ', ' + data.color.g || color.g || 100 + ', ' + data.color.b || color.b || 100 + ', ' + data.a + ')',
             };
 
             rectangle.pivot();
@@ -118,7 +118,7 @@
             const data = dataset.data[index];
 
             const color = options.yColors[data.y];
-            model.backgroundColor = 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + data.a + ')';
+            model.backgroundColor = 'rgba(' + data.color.r || color.r || 100 + ', ' + data.color.g || color.g || 100 + ', ' + data.color.b || color.b || 100 + ', ' + data.a + ')';
         }
     });
 })();
