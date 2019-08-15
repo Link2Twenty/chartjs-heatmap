@@ -102,9 +102,10 @@
                 // Appearance
                 base: yScale.getPixelForTick(data.y) + yTickHeight,
                 width: xTickWidth,
-                backgroundColor: 'rgba(' + data.color ? data.color.r || color.r || 100 : color.r || 100 + ', '
-                + data.color ? data.color.g || color.g || 100 : color.g || 100 + ', '
-                + data.color ? data.color.b || color.b || 100 : color.b || 100 + ', ' 
+                backgroundColor: 'rgba(' 
+                + data.color ? typeof data.color.r === "number" ? data.color.r : typeof color.r === "number" ? color.r : 100 : typeof color.b === "number" ? color.r : 100 + ', '
+                + data.color ? typeof data.color.g === "number" ? data.color.g : typeof color.g === "number" ? color.g : 100 : typeof color.g === "number" ? color.g : 100 + ', '
+                + data.color ? typeof data.color.b === "number" ? data.color.b : typeof color.b === "number" ? color.b : 100 : typeof color.b === "number" ? color.b : 100 || 100 + ', ' 
                 + data.a + ')',
             };
 
@@ -121,9 +122,10 @@
             const data = dataset.data[index];
 
             const color = options.yColors[data.y];
-            model.backgroundColor = 'rgba(' + data.color ? data.color.r || color.r || 100 : color.r || 100 + ', '
-                + data.color ? data.color.g || color.g || 100 : color.g || 100 + ', '
-                + data.color ? data.color.b || color.b || 100 : color.b || 100 + ', ' 
+            model.backgroundColor = ''rgba(' 
+                + data.color ? typeof data.color.r === "number" ? data.color.r : typeof color.r === "number" ? color.r : 100 : typeof color.b === "number" ? color.r : 100 + ', '
+                + data.color ? typeof data.color.g === "number" ? data.color.g : typeof color.g === "number" ? color.g : 100 : typeof color.g === "number" ? color.g : 100 + ', '
+                + data.color ? typeof data.color.b === "number" ? data.color.b : typeof color.b === "number" ? color.b : 100 : typeof color.b === "number" ? color.b : 100 || 100 + ', ' 
                 + data.a + ')',
         }
     });
