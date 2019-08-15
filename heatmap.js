@@ -102,7 +102,10 @@
                 // Appearance
                 base: yScale.getPixelForTick(data.y) + yTickHeight,
                 width: xTickWidth,
-                backgroundColor: 'rgba(' + data.color.r || color.r || 100 + ', ' + data.color.g || color.g || 100 + ', ' + data.color.b || color.b || 100 + ', ' + data.a + ')',
+                backgroundColor: 'rgba(' + data.color ? data.color.r || color.r || 100 : color.r || 100 + ', '
+                + data.color ? data.color.g || color.g || 100 : color.g || 100 + ', '
+                + data.color ? data.color.b || color.b || 100 : color.b || 100 + ', ' 
+                + data.a + ')',
             };
 
             rectangle.pivot();
@@ -118,7 +121,10 @@
             const data = dataset.data[index];
 
             const color = options.yColors[data.y];
-            model.backgroundColor = 'rgba(' + data.color.r || color.r || 100 + ', ' + data.color.g || color.g || 100 + ', ' + data.color.b || color.b || 100 + ', ' + data.a + ')';
+            model.backgroundColor = 'rgba(' + data.color ? data.color.r || color.r || 100 : color.r || 100 + ', '
+                + data.color ? data.color.g || color.g || 100 : color.g || 100 + ', '
+                + data.color ? data.color.b || color.b || 100 : color.b || 100 + ', ' 
+                + data.a + ')',
         }
     });
 })();
