@@ -1,13 +1,13 @@
-(function() {
+(function () {
   'use strict';
 
-  Chart.Heatmap = function(context, config) {
+  Chart.Heatmap = function (context, config) {
     config.type = 'heatmap';
 
     return new Chart(context, config);
   };
 
-  const helpers = Chart.helpers;
+  var helpers = Chart.helpers;
 
   Chart.defaults.heatmap = {
     legend: {
@@ -15,15 +15,14 @@
     },
     tooltips: {
       callbacks: {
-        title: function(tooltipItems, data) {
-          // Pick first xLabel for now
+        title: function (tooltipItems, data) {
           if (tooltipItems.length > 0) {
             return data.yLabels[tooltipItems[0].yLabel];
           }
 
           return '';
         },
-        label: function(tooltipItem, data) {
+        label: function (tooltipItem, data) {
           let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
           return datasetLabel + ': ' + (data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].v * 100).toFixed(2) + '%';
         }
@@ -36,7 +35,7 @@
         position: 'bottom',
 
         gridLines: {
-          offsetGridLines: true // labels are between lines
+          offsetGridLines: true
         }
       }],
       yAxes: [{
@@ -44,47 +43,35 @@
         position: 'left',
 
         gridLines: {
-          offsetGridLines: true // labels are between lines
+          offsetGridLines: true
         }
       }]
     }
   };
 
   Chart.controllers.heatmap = Chart.DatasetController.extend({
-
-    /**
-     * Element type used to generate a meta dataset (e.g. Chart.element.Line).
-     * @type {Chart.core.element}
-     */
     datasetElementType: null,
-
-    /**
-     * Element type used to generate a meta data (e.g. Chart.element.Point).
-     * @type {Chart.core.element}
-     */
     dataElementType: Chart.elements.Rectangle,
 
-    update: function(reset) {
-      let me = this;
-      helpers.each(me.getMeta().data, function(rectangle, index) {
-        me.updateElement(rectangle, index, reset);
-      }, me);
+    update: function (reset) {
+      helpers.each(this.getMeta().data, function (rectangle, index) {
+        this.updateElement(rectangle, index, reset);
+      }.bind(this), this);
     },
 
-    updateElement: function(rectangle, index, reset) {
-      const me = this;
-      const dataset = me.getDataset();
-      const data = dataset.data[index];
-      const meta = me.getMeta();
-      const xScale = me.getScaleForId(meta.xAxisID);
-      const yScale = me.getScaleForId(meta.yAxisID);
-      const yTickHeight = Math.abs(yScale.getPixelForTick(1.1) - yScale.getPixelForTick(0.2));
-      const xTickWidth = Math.abs(xScale.getPixelForTick(index + 0.9) - xScale.getPixelForTick(index));
+    updateElement: function (rectangle, index, reset) {
+      var dataset = this.getDataset();
+      var data = dataset.data[index];
+      var meta = this.getMeta();
+      var xScale = this.getScaleForId(meta.xAxisID);
+      var yScale = this.getScaleForId(meta.yAxisID);
+      var yTickHeight = Math.abs(yScale.getPixelForTick(1.1) - yScale.getPixelForTick(0.2));
+      var xTickWidth = Math.abs(xScale.getPixelForTick(index + 0.9) - xScale.getPixelForTick(index));
 
-      const xCoord = typeof data.x === "string" ? me.chart.config.data.xLabels.indexOf(data.x) : data.x;
-      const yCoord = typeof data.y === "string" ? me.chart.config.data.yLabels.indexOf(data.y) : data.y;
+      var xCoord = typeof data.x === "string" ? this.chart.config.data.xLabels.indexOf(data.x) : data.x;
+      var yCoord = typeof data.y === "string" ? this.chart.config.data.yLabels.indexOf(data.y) : data.y;
 
-      const color = me.chart.options.yColors[yCoord] || {
+      var color = this.chart.options.yColors[yCoord] || {
         r: 100,
         g: 100,
         b: 100
@@ -92,48 +79,46 @@
 
       rectangle._xScale = xScale;
       rectangle._yScale = yScale;
-      rectangle._datasetIndex = me.index;
+      rectangle._datasetIndex = this.index;
       rectangle._index = index;
       rectangle._model = {
-        x: reset ? xScale.getPixelForDecimal(0.5) : xScale.getPixelForValue(null, xCoord, me.index, true),
+        x: reset ? xScale.getPixelForDecimal(0.5) : xScale.getPixelForValue(null, xCoord, this.index, true),
         y: reset ? yScale.getBasePixel() : yScale.getPixelForTick(yCoord),
 
         // Tooltip
-        label: me.chart.data.labels[index],
+        label: this.chart.data.labels[index],
         datasetLabel: dataset.label,
 
         // Appearance
         base: yScale.getPixelForTick(yCoord) + yTickHeight,
         width: xTickWidth,
         backgroundColor: 'rgba(' +
-          (data.color ? typeof data.color.r === "number" ? data.color.r : typeof color.r === "number" ? color.r : 100 : typeof color.b === "number" ? color.r : 100) + ', ' +
-          (data.color ? typeof data.color.g === "number" ? data.color.g : typeof color.g === "number" ? color.g : 100 : typeof color.g === "number" ? color.g : 100) + ', ' +
-          (data.color ? typeof data.color.b === "number" ? data.color.b : typeof color.b === "number" ? color.b : 100 : typeof color.b === "number" ? color.b : 100) + ', ' +
-          data.a + ')'
+          (data.color ? data.color.r || color.r : color.r) + ', ' +
+          (data.color ? data.color.g || color.g : color.g) + ', ' +
+          (data.color ? data.color.b || color.b : color.b) + ', ' +
+          (data.a || 1) + ')'
       };
 
       rectangle.pivot();
     },
 
-    removeHoverStyle: function(rectangle) {
-      const dataset = this.chart.data.datasets[rectangle._datasetIndex];
-      const index = rectangle._index;
-      let custom = rectangle.custom || {};
-      let model = rectangle._model;
-      const options = this.chart.options;
-      const rectangleElementOptions = this.chart.options.elements.rectangle;
-      const data = dataset.data[index];
+    removeHoverStyle: function (rectangle) {
+      var dataset = this.chart.data.datasets[rectangle._datasetIndex];
+      var index = rectangle._index;
+      var model = rectangle._model;
+      var options = this.chart.options;
+      var data = dataset.data[index];
 
-      const color = options.yColors[data.y] || {
+      var color = options.yColors[data.y] || {
         r: 100,
         g: 100,
         b: 100
       };
       model.backgroundColor = 'rgba(' +
-        (data.color ? typeof data.color.r === "number" ? data.color.r : typeof color.r === "number" ? color.r : 100 : typeof color.b === "number" ? color.r : 100) + ', ' +
-        (data.color ? typeof data.color.g === "number" ? data.color.g : typeof color.g === "number" ? color.g : 100 : typeof color.g === "number" ? color.g : 100) + ', ' +
-        (data.color ? typeof data.color.b === "number" ? data.color.b : typeof color.b === "number" ? color.b : 100 : typeof color.b === "number" ? color.b : 100) + ', ' +
-        data.a + ')'
+        (data.color ? data.color.r || color.r : color.r) + ', ' +
+        (data.color ? data.color.g || color.g : color.g) + ', ' +
+        (data.color ? data.color.b || color.b : color.b) + ', ' +
+        (data.a || 1) + ')'
     }
   });
 })();
