@@ -112,8 +112,6 @@
           data.a + ')'
       };
 
-      console.log('rgba(' + (data.color ? typeof data.color.r === "number" ? data.color.r : typeof color.r === "number" ? color.r : 100 : typeof color.b === "number" ? color.r : 100) + ')')
-
       rectangle.pivot();
     },
 
