@@ -122,7 +122,7 @@
             const data = dataset.data[index];
 
             const color = options.yColors[data.y];
-            model.backgroundColor = ''rgba(' 
+            model.backgroundColor = 'rgba(' 
                 + data.color ? typeof data.color.r === "number" ? data.color.r : typeof color.r === "number" ? color.r : 100 : typeof color.b === "number" ? color.r : 100 + ', '
                 + data.color ? typeof data.color.g === "number" ? data.color.g : typeof color.g === "number" ? color.g : 100 : typeof color.g === "number" ? color.g : 100 + ', '
                 + data.color ? typeof data.color.b === "number" ? data.color.b : typeof color.b === "number" ? color.b : 100 : typeof color.b === "number" ? color.b : 100 || 100 + ', ' 
